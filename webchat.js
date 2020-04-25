@@ -29,7 +29,11 @@ function build_embed_src() {
     } else {
         src += ':' + server_port;
     }
-    src += '/' + url.hash;
+    if (url.hash === '') {
+        src += '/' + '#lounge';
+    } else {
+        src += '/' + url.hash;
+    }
 
     return src;
 }

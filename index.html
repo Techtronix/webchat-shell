@@ -14,19 +14,21 @@
     <meta name="author" content="Techman">
     <meta name="source" content="https://www.techtronix.net">
 
-    <link rel="stylesheet" type="text/css" href="../style.css">
-    <script type="text/javascript" src="../webchat.js" prefetch="true"></script>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <script type="text/javascript" src="./webchat.js" prefetch="true"></script>
 </head>
 <body>
     <div id="chat">
         <noscript>You MUST have JavaScript enabled to use this page. Otherwise, nothing of value will appear.</noscript>
     </div>
     <script type="text/javascript">
-        let embed = document.createElement('iframe');
-        embed.setAttribute('id', 'chat-iframe');
-        embed.setAttribute('frameborder', 0);
-        embed.setAttribute('src', build_embed_src());
-        document.getElementById('chat').appendChild(embed);
+        window.addEventListener('load', () => {
+            let embed = document.createElement('iframe');
+            embed.setAttribute('id', 'chat-iframe');
+            embed.setAttribute('frameborder', 0);
+            embed.setAttribute('src', build_embed_src());
+            document.getElementById('chat').appendChild(embed);
+        });
     </script>
 </body>
 </html>
