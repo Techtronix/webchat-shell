@@ -67,5 +67,7 @@ window.addEventListener('load', () => {
     if (hash === '') {
         hash = '#lounge'
     }
-    document.title = `Techtronix Webchat: ${hash}`;
+    // Not using template strings for now due to compat
+    // document.title = `Techtronix Webchat: ${hash}`;
+    document.title = 'Techtronix Webchat: ' + hash;
 });
