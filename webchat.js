@@ -97,14 +97,3 @@ window.addEventListener('load', () => {
     document.getElementById('chat').appendChild(embed);
     console.info('KiwiIRC embed created:', kiwiUrl);
 });
-
-// window.addEventListener('load', () => {
-//     let url = new URL(window.location);
-//     let hash = url.hash;
-//     if (hash === '') {
-//         hash = '#lounge'
-//     }
-//     // Not using template strings for now due to compat
-//     // document.title = `Techtronix Webchat: ${hash}`;
-//     document.title = 'Techtronix Webchat: ' + hash;
-// });
