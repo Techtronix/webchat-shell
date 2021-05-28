@@ -5,43 +5,72 @@
 
 'use strict';
 
+// Configuration
+const HOST = 'irc.techtronix.net';
+const PORT = 6697;
+const SECURE = true;
+
+/** Build IRC URL
+ * @param {string} host The IRC host
+ * @param {number} port The IRC port
+ * @param {boolean} secure Is the IRC port set to accept TLS connections?
+ * @return {string} The constructed URL
+ */
+function buildIrcUrl(host, port, secure) {
+    // If port is 6667, but secure is enabled, send a warning to console
+    if ((port === 6667) && secure) {
+        console.warn('Specified port is 6667, but secure is set to true. Did you mean for secure to be false?');
+    }
+
+    // Continue on with the URL building
+    let urlString = '';
+    if (secure) {
+        urlString += 'ircs://';
+    } else {
+        urlString += 'irc://';
+    }
+    urlString += host;
+    urlString += ':';
+    urlString += port;
+    return encodeURI(urlString);
+}
+
 /** Build KiwiIRC link
  *
  * Useful for embedding into an iframe
- * @return {string} A URL string
+ * @param {string} host The IRC host
+ * @param {number} port The IRC port
+ * @param {boolean} secure Is the IRC port set to accept TLS connections?
+ * @return {string} An encoded URL string
  *
  * Example:
- * https://kiwiirc.com/nextclient/irc.techtronix.net:+6697/#test
+ * https://kiwiirc.com/nextclient/#ircs://irc.techtronix.net:6697/?nick=Guest?&channel=#test
  */
-function buildKiwiLink() {
+function buildKiwiLink(host, port, secure) {
     // Variables
-    const baseUrl = 'https://kiwiirc.com/nextclient/';
-    const ircHost = 'irc.techtronix.net';
-    const ircPort = 6697;
-    const useTls = true;
+    const baseUrl = 'https://kiwiirc.com/nextclient/#';
 
     // Get page URL information
     let url = new URL(window.location);
 
     // Construct the iframe src URL
-    let str = baseUrl;
-    str += ircHost;
-    if (useTls) {
-        str += ':+';
-    } else {
-        str += ':';
+    let urlString = baseUrl;
+    urlString += buildIrcUrl(host, port, secure);
+    urlString += '/';
+    // If a hash e.g. #lounge is specified, include it
+    if (url.hash !== '') {
+        urlString += url.hash;
     }
-    str += ircPort;
-    str += '/';
-    if (url.hash === '') {
-        str += '#lounge';
+    // If parameters were provided, include it
+    if (url.search !== '') {
+        urlString += url.search;
     } else {
-        str += url.hash;
+        // Only include this if there was no hash
+        if (url.hash === '') {
+            urlString += '?nick=Guest?&channel=#lounge';
+        }
     }
-    return str;
-
-    // For now, we are not returning the template version of this for compat
-    // return `${baseUrl}${ircHost}${useTls ? ':+' : ':'}${ircPort}/${url.hash === '' ? '#lounge' : url.hash}`;
+    return encodeURI(urlString);
 }
 
 /** Change embed iframe dimensions on window resize
@@ -57,8 +86,10 @@ window.addEventListener('load', () => {
     let embed = document.createElement('iframe');
     embed.setAttribute('id', 'chat-iframe');
     embed.setAttribute('frameborder', 0);
-    embed.setAttribute('src', buildKiwiLink());
+    let kiwiUrl = buildKiwiLink(HOST, PORT, SECURE);
+    embed.setAttribute('src', kiwiUrl);
     document.getElementById('chat').appendChild(embed);
+    console.info('KiwiIRC embed created:', kiwiUrl);
 });
 
 // window.addEventListener('load', () => {
