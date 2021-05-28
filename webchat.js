@@ -5,15 +5,21 @@
 
 'use strict';
 
-// Configuration
-const HOST = 'irc.techtronix.net';
-const PORT = 6697;
-const SECURE = true;
+/** Configuration object
+ * @property {string} host The IRC server hostname
+ * @property {number} port The IRC server port
+ * @property {boolean} secure Is the IRC port set to accept secure connections?
+ */
+const ircConfig = {
+    host: 'irc.techtronix.net',
+    port: 6697,
+    secure: true
+}
 
 /** Build IRC URL
  * @param {string} host The IRC host
  * @param {number} port The IRC port
- * @param {boolean} secure Is the IRC port set to accept TLS connections?
+ * @param {boolean} secure Is the IRC port set to accept secure connections?
  * @return {string} The constructed URL
  */
 function buildIrcUrl(host, port, secure) {
@@ -40,7 +46,7 @@ function buildIrcUrl(host, port, secure) {
  * Useful for embedding into an iframe
  * @param {string} host The IRC host
  * @param {number} port The IRC port
- * @param {boolean} secure Is the IRC port set to accept TLS connections?
+ * @param {boolean} secure Is the IRC port set to accept secure connections?
  * @return {string} An encoded URL string
  *
  * Example:
@@ -86,7 +92,7 @@ window.addEventListener('load', () => {
     let embed = document.createElement('iframe');
     embed.setAttribute('id', 'chat-iframe');
     embed.setAttribute('frameborder', 0);
-    let kiwiUrl = buildKiwiLink(HOST, PORT, SECURE);
+    let kiwiUrl = buildKiwiLink(ircConfig.host, ircConfig.port, ircConfig.secure);
     embed.setAttribute('src', kiwiUrl);
     document.getElementById('chat').appendChild(embed);
     console.info('KiwiIRC embed created:', kiwiUrl);
